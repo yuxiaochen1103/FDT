@@ -1,0 +1,24 @@
+FUSED_LAYERNORM: False
+DATA:
+  IMG_SIZE: 224
+
+  
+MODEL:
+  TYPE: swin
+  NAME: swin_large_patch4_window7_224_22k
+  DROP_RATE: 0.0
+  DROP_PATH_RATE: 0.2
+  SWIN:
+    num_classes: 768 #ft dim in the common space
+    EMBED_DIM: 192
+    DEPTHS: [ 2, 2, 18, 2 ]
+    NUM_HEADS: [ 6, 12, 24, 48 ]
+    WINDOW_SIZE: 7
+    PATCH_SIZE: 4
+    MLP_RATIO: 4.
+    QKV_BIAS: True
+    QK_SCALE: null
+    APE: False
+    PATCH_NORM: True
+    use_checkpoint: False
+    

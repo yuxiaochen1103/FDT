@@ -1,0 +1,27 @@
+--extra-index-url https://download.pytorch.org/whl/cu116
+torch==1.12.1+cu116
+torchvision==0.13.1+cu116
+yacs==0.1.8
+tensorboard==2.4.0
+tensorboardX==2.6
+opencv-python
+Pillow
+numpy
+absl-py
+prettytable
+colorlog
+easydict
+ftfy
+scikit-learn
+textaugment
+gdown
+scipy
+future
+tqdm
+tb-nightly
+flake8==3.7.9
+yapf==0.29.0
+isort==4.3.21
+pandas
+timm==0.6.11
+webdataset

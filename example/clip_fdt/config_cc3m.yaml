@@ -1,0 +1,82 @@
+model:
+    type: clip_fdt_vitb32
+    kwargs:
+        image_encode:
+            embed_dim: 512
+        text_encode:
+            bpe_path: 'text_info/bpe_simple_vocab_16e6.txt.gz'
+            text_encode_type: Transformer #Transformer,Bert,GPT2
+            text_model_utils:
+                random: False
+                freeze: False
+            embed_dim: 512
+        fdt:
+            sd_temperature: 1000 #temperature for attention weights
+            att_func_type: 'sparsemax'
+            pool_type: 'max'
+            use_allgather: True
+            sd_num: 16384 #fdt num
+            sd_dim: 512 #fdt dim
+            raw_img_ft_dim: 768
+            raw_txt_ft_dim: 512
+
+grad_clip:
+    type: logit_scale_param_value
+    value: 3
+    max_value: 6
+
+t_decay: #temperature decay
+    org_t: 1000
+    sd_T_decay_iter: 2700 #each epoch has 2705 iteration
+    sd_T_decay_w: 1
+    sd_T_min: 0.01
+
+optimizer:
+    type: AdamW
+    kwargs:
+        lr: 0.0001  # 5e-4
+        weight_decay: 0.1
+        betas: [0.9, 0.98]
+        amsgrad: False
+        eps: 0.00000001
+
+    pconfig:
+        bn_w:
+            weight_decay: 0
+        bn_b:
+            weight_decay: 0
+        ln_w:
+            weight_decay: 0
+        ln_b:
+            weight_decay: 0
+        bias:
+            weight_decay: 0
+        logit_scale:
+            weight_decay: 0
+
+
+lr_scheduler:
+    type: Cosine
+    kwargs:
+        base_lr: 0.0001
+        warmup_lr: 0.001
+        min_lr: 0.0
+        warmup_steps: 2500
+        max_iter: 86560 # 2705 * 32
+
+data:
+    train:
+        epoch: 32
+        data_path: /research/cbim/vast/yc984/img_txt_dataset/cc3m/cc3m_2/{00000..02769}.tar # default, other choices: _256, _512, _1024, _2048
+        transforms: MOCOV2_single
+        num_samples: 2769025
+        num_shards: 2770
+        workers: 5
+        batch_size: 128
+
+
+saver:
+    print_freq: 100
+    val_freq: 2700
+    save_freq: 2700 #each epoch has 2705 iteration
+    save_many: True

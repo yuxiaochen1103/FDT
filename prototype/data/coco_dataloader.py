@@ -13,7 +13,7 @@ def build_coco_dataloader(data_fold, global_rank, world_size, is_train):
     # build sampler
     #to do.... check config
     dataset = COCO_Dataset(
-        base_fold=data_fold,
+        base_fold=data_fold + '/coco',
         is_train=is_train,
         transform=transforms)
 
